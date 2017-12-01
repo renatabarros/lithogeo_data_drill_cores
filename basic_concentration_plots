@@ -1,0 +1,45 @@
+"""
+Created on Fri Dec  1 16:18:34 2017
+
+@author: Renata
+"""
+
+# Start with the basic packages
+
+import matplotlib.pyplot as plt
+import numpy as np
+import csv
+
+# Import the csv file with drill core geochemistry data
+
+f = open("drill_holes.csv", "r")
+a = csv.reader(f)
+geochem_raw_data = list(a)
+
+split_data = []
+for each in geochem_raw_data:
+    item = each[0]
+    items = item.split(";")
+    split_data.append(items)
+
+# Definition of a function that takes the complete sample list (input_list)
+# and a drill hole name (input_name, e.g. 'ACL-13-02) and returns an array with
+# all analysed intervals of that drill hole
+
+def dh_finder(input_list, input_name):
+    dh_data = []
+    for rows in input_list:
+        if input_name == rows[1]:
+            dh_data.append(rows)
+    return np.array(dh_data)
+
+ACL_13_02 = dh_finder(split_data, 'ACL-13-02')
+print(ACL_13_02)
+
+# Plot the Li versus Ba concentrations
+
+ACL_Li = ACL_13_02[: , 8]
+ACL_Ba = ACL_13_02[: , 7]
+
+
+plt.scatter(ACL_Li, ACL_Ba)
